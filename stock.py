@@ -101,7 +101,7 @@ def searchStock():
     f_less.write('条件3：价格不大于80\n')
 
     f_break = open('break'+t+'.txt', 'w')
-    f_break.write(t + '接近20日均线股票\n')
+    f_break.write(t + '突破20日均线股票\n')
     f_break.write('条件1：当天收盘价格超过20日均线\n')
     f_break.write('条件2：当天开盘价格低于20日均线\n')
     f_break.write('条件3：价格不大于80\n')
