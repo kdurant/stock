@@ -84,27 +84,33 @@ def priceLessThanMA20(info):
 
 
 def searchStock():
-    t = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+    fail_num = 0
+    t = time.strftime("%Y-%m-%d", time.localtime())
     f_less = open('less'+t+'.txt', 'w')
     f_break = open('break'+t+'.txt', 'w')
-    cons = ts.get_apis()
+    # cons = ts.get_apis()
     for num in range(0, len(id)):
         print('当前读取股票代码 %s, 已经检索 %d' % (id[num], num))
         try:
-            info = ts.bar(id[num], conn=cons, start_date='2018-01-13', end_date='2018-03-14', ma=[5, 10, 20], adj='qfq')
-        except:
+            # info = ts.bar(id[num], conn=cons, start_date='2018-01-13', end_date='2018-03-14', ma=[5, 10, 20], adj='qfq')
+            info = ts.get_hist_data(id[num], start='2018-03-13', end='2018-03-14')
+            # info.empty
+        except AttributeError:
+            fail_num += 1
+            continue
             pass
         else:
             if priceBreakMA20(info):
-                f_break.write(info.code[0])
-                print('-----------------%s 穿过20日均线' % info.code[0])
+                f_break.write(id[num])
+                print('-----------------%s 穿过20日均线' % id[num])
             if priceLessThanMA20(info):
-                f_less.write(info.code[0] + '\n')
-                print('!!!!!!!!!!!!!!!!!%s 小于20日均线' % info.code[0])
+                f_less.write(id[num] + '\n')
+                print('!!!!!!!!!!!!!!!!!%s 小于20日均线' % id[num])
 
     f_less.close()
     f_break.close()
-    ts.close_apis(cons)
+    print(fail_num)
+    # ts.close_apis(cons)
 
 
 if __name__ == '__main__':
